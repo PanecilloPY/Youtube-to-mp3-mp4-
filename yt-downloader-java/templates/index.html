@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+    <div class="form-container bg-gray-800 p-8 rounded-lg shadow-2xl w-full max-w-md animate__animated animate__fadeIn">
+        <h1 class="text-3xl font-bold text-center mb-6">YouTube Downloader</h1>
+
+        <!-- Bloque para mostrar errores -->
+        {% if error %}
+            <div class="bg-red-500 text-white p-4 rounded-lg mb-4">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Formulario de descarga -->
+        <form id="downloadForm" action="/download" method="post" class="space-y-4">
+            <div>
+                <label for="url" class="block text-sm font-medium mb-1">URL del video:</label>
+                <input type="text" id="url" name="url" required
+                    class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Pega la URL aquí">
+            </div>
+            <div>
+                <label for="format" class="block text-sm font-medium mb-1">Formato:</label>
+                <select id="format" name="format"
+                    class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="mp4">MP4 (Video)</option>
+                    <option value="mp3">MP3 (Audio)</option>
+                </select>
+            </div>
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+                Descargar
+            </button>
+        </form>
+    </div>
+
+    <!-- Script para validar y borrar el campo de la URL después de la descarga -->
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', function(event) {
+            const urlInput = document.getElementById('url');
+
+            // Validación: Evita que el formulario se envíe si el campo está vacío
+            if (urlInput.value.trim() === '') {
+                event.preventDefault();
+                alert('Por favor, ingresa una URL válida de YouTube.');
+            } else {
+                // Borra el campo de la URL después de que el formulario se haya enviado correctamente
+                setTimeout(function() {
+                    urlInput.value = '';
+                }, 100); // Pequeño retraso para asegurar que el formulario se envíe primero
+            }
+        });
+    </script>
+</body>
+</html>
